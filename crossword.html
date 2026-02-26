@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"/>
+<title>الكلمات المتقاطعة - عمر ٥ سنوات</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap');
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: 'Tajawal', Arial, sans-serif;
+    background: #fff;
+    color: #222;
+    width: 210mm;
+    min-height: 297mm;
+    padding: 14mm 16mm 14mm 16mm;
+  }
+
+  /* ── Header ── */
+  .header {
+    text-align: center;
+    background: linear-gradient(135deg, #1a5276, #2e86c1);
+    color: #fff;
+    border-radius: 18px;
+    padding: 14px 20px 12px;
+    margin-bottom: 14px;
+  }
+  .header h1 { font-size: 28pt; font-weight: 900; letter-spacing: 1px; }
+  .header p  { font-size: 13pt; margin-top: 4px; opacity:.9; }
+
+  .badge {
+    display: inline-block;
+    background: #f39c12;
+    color:#fff;
+    border-radius: 50px;
+    padding: 4px 18px;
+    font-size: 11pt;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+
+  /* ── Instruction ── */
+  .instruction {
+    text-align: center;
+    font-size: 12pt;
+    color: #1a5276;
+    font-weight: 700;
+    border: 2px dashed #2e86c1;
+    border-radius: 12px;
+    padding: 7px 14px;
+    margin-bottom: 16px;
+  }
+
+  /* ── Layout: grid + clues side by side ── */
+  .main-row {
+    display: flex;
+    flex-direction: row-reverse; /* grid on right, clues on left (RTL) */
+    gap: 20px;
+    align-items: flex-start;
+    margin-bottom: 18px;
+  }
+
+  /* ── Crossword Grid ── */
+  .grid-wrap { flex: 0 0 auto; }
+
+  table.grid {
+    border-collapse: collapse;
+    direction: ltr; /* grid coords are LTR internally */
+  }
+  table.grid td {
+    width:  32px;
+    height: 32px;
+    border: none;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 15pt;
+    font-weight: 900;
+    position: relative;
+  }
+  td.black { background: #1c2833; }
+  td.white {
+    background: #fff;
+    border: 2.5px solid #2e86c1;
+    color: #222;
+  }
+  td.white .num {
+    position: absolute;
+    top: 1px;
+    left: 3px;
+    font-size: 7pt;
+    font-weight: 900;
+    color: #e67e22;
+    line-height: 1;
+  }
+
+  /* ── Clues ── */
+  .clues-wrap { flex: 1 1 auto; }
+
+  .clue-section { margin-bottom: 14px; }
+
+  .clue-section h2 {
+    font-size: 14pt;
+    font-weight: 900;
+    padding: 5px 12px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    color: #fff;
+  }
+  .clue-section.across h2 { background: #2e86c1; }
+  .clue-section.down   h2 { background: #1a8c4e; }
+
+  .clue-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 10px;
+    border-radius: 10px;
+    margin-bottom: 6px;
+    font-size: 12.5pt;
+    border-right: 5px solid transparent;
+  }
+  .clue-section.across .clue-item { background:#eaf4fc; border-right-color:#2e86c1; }
+  .clue-section.down   .clue-item { background:#eafaf1; border-right-color:#1a8c4e; }
+
+  .clue-num  { font-weight:900; color:#e67e22; font-size:13pt; min-width:22px; }
+  .clue-emoji{ font-size:17pt; }
+  .clue-text { flex:1; color:#222; }
+  .clue-boxes{ font-size:15pt; color:#aaa; letter-spacing:4px; white-space:nowrap; }
+
+  /* ── Divider ── */
+  .divider {
+    border: none;
+    border-top: 3px dashed #ddd;
+    margin: 16px 0;
+  }
+
+  /* ── Answer Key ── */
+  .answer-section { page-break-before: always; }
+
+  .answer-header {
+    text-align:center;
+    background: linear-gradient(135deg,#1a8c4e,#27ae60);
+    color:#fff;
+    border-radius:18px;
+    padding:12px 20px 10px;
+    margin-bottom:14px;
+  }
+  .answer-header h2 { font-size:22pt; font-weight:900; }
+  .answer-header p  { font-size:11pt; opacity:.9; }
+
+  table.grid td.answer { background:#eafaf1; border-color:#1a8c4e; color:#1a8c4e; }
+
+  .answer-list {
+    margin-top: 18px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .ans-item {
+    background: #f4f6f7;
+    border-radius: 12px;
+    padding: 8px 14px;
+    border-right: 5px solid #e67e22;
+    font-size: 12pt;
+  }
+  .ans-word { font-size:15pt; font-weight:900; color:#1a8c4e; }
+
+  .footer-note {
+    text-align:center;
+    margin-top:22px;
+    font-size:13pt;
+    font-weight:700;
+    color:#6c3a83;
+  }
+
+  @media print {
+    body { width:210mm; padding:14mm 16mm; }
+    .answer-section { page-break-before: always; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ════════════ PAGE 1: PUZZLE ════════════ -->
+
+<div class="header">
+  <h1>🧩 الكلمات المتقاطعة 🧩</h1>
+  <p>تحدي ذهني ممتع للأطفال</p>
+</div>
+
+<div style="text-align:center">
+  <span class="badge">👶 عمر ٥ سنوات  •  ٦ كلمات</span>
+</div>
+
+<div class="instruction">
+  📝 اقرأ التلميح، فكّر، ثم اكتب الكلمة في المربعات!
+</div>
+
+<div class="main-row">
+
+  <!-- Grid (right side in RTL) -->
+  <div class="grid-wrap">
+    <!--
+      Grid 7×9  (row 0..6 , col 0..8)
+      col 8 = rightmost (Arabic right-to-left)
+      Words:
+        بيت  H row1 cols 8→6  (ب=8, ي=7, ت=6)
+        نمر  H row3 cols 8→6  (ن=8, م=7, ر=6)
+        ولد  H row4 cols 8→6  (و=8, ل=7, د=6)
+        رسم  H row5 cols 8→6  (ر=8, س=7, م=6)
+        أمل  V col7 rows 2→4  (أ=2, م=3, ل=4)
+        نور  V col8 rows 3→5  (ن=3, و=4, ر=5)
+      Crossings: (3,7)=م ,(3,8)=ن ,(4,7)=ل ,(4,8)=و ,(5,8)=ر ✓
+    -->
+    <table class="grid">
+      <!--
+        We render col 8 first (rightmost), then 7,6,...,0
+        so the grid looks natural for Arabic right-to-left reading.
+        But we keep internal coords as (row, col) with col8=rightmost.
+        HTML table direction is LTR with reversed column rendering.
+      -->
+      <tbody id="gridBody"></tbody>
+    </table>
+    <p style="text-align:center;font-size:9pt;color:#999;margin-top:6px;">← اتجاه الكلمات الأفقية</p>
+  </div>
+
+  <!-- Clues (left side in RTL) -->
+  <div class="clues-wrap">
+
+    <div class="clue-section across">
+      <h2>➡️ أفقي</h2>
+
+      <div class="clue-item">
+        <span class="clue-num">1</span>
+        <span class="clue-emoji">🏠</span>
+        <span class="clue-text">نسكن فيه</span>
+        <span class="clue-boxes">□ □ □</span>
+      </div>
+
+      <div class="clue-item">
+        <span class="clue-num">3</span>
+        <span class="clue-emoji">🐯</span>
+        <span class="clue-text">حيوان مخطط كبير</span>
+        <span class="clue-boxes">□ □ □</span>
+      </div>
+
+      <div class="clue-item">
+        <span class="clue-num">4</span>
+        <span class="clue-emoji">👦</span>
+        <span class="clue-text">طفل صغير ذكر</span>
+        <span class="clue-boxes">□ □ □</span>
+      </div>
+
+      <div class="clue-item">
+        <span class="clue-num">5</span>
+        <span class="clue-emoji">🎨</span>
+        <span class="clue-text">نرسم بالألوان</span>
+        <span class="clue-boxes">□ □ □</span>
+      </div>
+    </div>
+
+    <div class="clue-section down">
+      <h2>⬇️ عمودي</h2>
+
+      <div class="clue-item">
+        <span class="clue-num">2</span>
+        <span class="clue-emoji">⭐</span>
+        <span class="clue-text">نتمناه ونحلم به</span>
+        <span class="clue-boxes">□ □ □</span>
+      </div>
+
+      <div class="clue-item">
+        <span class="clue-num">3</span>
+        <span class="clue-emoji">💡</span>
+        <span class="clue-text">يجعلنا نرى في الظلام</span>
+        <span class="clue-boxes">□ □ □</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<hr class="divider"/>
+
+<div style="text-align:center;font-size:11pt;color:#888;">
+  💡 تلميح للأهل: الإجابات في الصفحة التالية
+</div>
+
+<!-- ════════════ PAGE 2: ANSWERS ════════════ -->
+<div class="answer-section">
+
+  <div class="answer-header">
+    <h2>✅ صفحة الإجابات ✅</h2>
+    <p>للأهل فقط — لا تعطها للطفل قبل المحاولة!</p>
+  </div>
+
+  <table class="grid" id="answerGrid" style="margin:0 auto 0 auto;"></table>
+
+  <div class="answer-list">
+
+    <div class="ans-item">
+      <span>1 أفقي 🏠 نسكن فيه</span><br/>
+      <span class="ans-word">بيت</span>
+    </div>
+
+    <div class="ans-item">
+      <span>2 عمودي ⭐ نتمناه ونحلم به</span><br/>
+      <span class="ans-word">أمل</span>
+    </div>
+
+    <div class="ans-item">
+      <span>3 أفقي 🐯 حيوان مخطط كبير</span><br/>
+      <span class="ans-word">نمر</span>
+    </div>
+
+    <div class="ans-item">
+      <span>3 عمودي 💡 يجعلنا نرى في الظلام</span><br/>
+      <span class="ans-word">نور</span>
+    </div>
+
+    <div class="ans-item">
+      <span>4 أفقي 👦 طفل صغير ذكر</span><br/>
+      <span class="ans-word">ولد</span>
+    </div>
+
+    <div class="ans-item">
+      <span>5 أفقي 🎨 نرسم بالألوان</span><br/>
+      <span class="ans-word">رسم</span>
+    </div>
+
+  </div>
+
+  <div class="footer-note">🌟 أحسنت يا صغيري! استمر في التعلم والمرح 🌟</div>
+
+</div>
+
+<script>
+// ─── Grid data ───
+// letter_grid[r][c] = letter or null
+// rows 0..6, cols 0..8  (col 8 = rightmost)
+const ROWS = 7, COLS = 9;
+const grid = Array.from({length:ROWS}, ()=>Array(COLS).fill(null));
+
+function placeH(row, startCol, word){
+  [...word].forEach((ch,i)=>{ grid[row][startCol-i]=ch; });
+}
+function placeV(startRow, col, word){
+  [...word].forEach((ch,i)=>{ grid[startRow+i][col]=ch; });
+}
+
+placeH(1, 8, 'بيت');
+placeH(3, 8, 'نمر');
+placeH(4, 8, 'ولد');
+placeH(5, 8, 'رسم');
+placeV(2, 7, 'أمل');
+placeV(3, 8, 'نور');
+
+const numbers = {
+  '1,8': '1',
+  '2,7': '2',
+  '3,8': '3',
+  '4,8': '4',
+  '5,8': '5',
+};
+
+function buildGrid(tbodyId, showLetters){
+  const tbody = document.getElementById(tbodyId) ||
+                (()=>{ const t=document.getElementById('answerGrid');
+                       const tb=document.createElement('tbody');
+                       t.appendChild(tb); return tb; })();
+
+  for(let r=0;r<ROWS;r++){
+    const tr=document.createElement('tr');
+    // Render cols right-to-left: col 8 first
+    for(let c=COLS-1;c>=0;c--){
+      const td=document.createElement('td');
+      const letter=grid[r][c];
+      if(letter===null){
+        td.className='black';
+      } else {
+        td.className= showLetters ? 'white answer' : 'white';
+        const num=numbers[`${r},${c}`];
+        if(num){
+          const span=document.createElement('span');
+          span.className='num';
+          span.textContent=num;
+          td.appendChild(span);
+        }
+        if(showLetters){
+          td.appendChild(document.createTextNode(letter));
+        }
+      }
+      tr.appendChild(td);
+    }
+    tbody.appendChild(tr);
+  }
+}
+
+buildGrid('gridBody', false);
+buildGrid('answerGrid', true);
+</script>
+</body>
+</html>
