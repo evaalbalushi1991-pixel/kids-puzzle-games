@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🎮 ألعاب الألغاز للأطفال</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap');
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Tajawal', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    header {
+      text-align: center;
+      padding: 30px 20px 10px;
+      color: white;
+    }
+    header h1 { font-size: 2.5rem; text-shadow: 2px 2px 6px rgba(0,0,0,0.3); }
+    header p { font-size: 1.1rem; opacity: 0.9; margin-top: 8px; }
+
+    /* Age Tabs */
+    .tabs {
+      display: flex;
+      gap: 16px;
+      margin: 20px 0;
+    }
+    .tab-btn {
+      padding: 14px 36px;
+      border: none;
+      border-radius: 50px;
+      font-size: 1.2rem;
+      font-family: 'Tajawal', sans-serif;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all .3s;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+    .tab-btn.age3 { background: #FF6B9D; color: white; }
+    .tab-btn.age5 { background: #4ECDC4; color: white; }
+    .tab-btn.active { transform: scale(1.08); box-shadow: 0 6px 20px rgba(0,0,0,0.35); }
+    .tab-btn:not(.active) { opacity: 0.65; }
+
+    /* Sections */
+    .section { display: none; width: 100%; max-width: 900px; padding: 0 16px 40px; }
+    .section.visible { display: block; }
+
+    /* Score bar */
+    .score-bar {
+      background: rgba(255,255,255,0.2);
+      border-radius: 16px;
+      padding: 10px 20px;
+      color: white;
+      font-size: 1.1rem;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .score-bar span { font-size: 1.5rem; font-weight: 900; }
+
+    /* Game Cards */
+    .game-card {
+      background: white;
+      border-radius: 24px;
+      padding: 28px;
+      margin-bottom: 28px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+      position: relative;
+      overflow: hidden;
+    }
+    .game-card::before {
+      content: '';
+      position: absolute;
+      top: 0; right: 0;
+      width: 120px; height: 120px;
+      border-radius: 0 0 0 100%;
+      opacity: 0.08;
+    }
+    .card-3::before { background: #FF6B9D; }
+    .card-5::before { background: #4ECDC4; }
+
+    .game-title {
+      font-size: 1.4rem;
+      font-weight: 900;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .game-desc { color: #666; font-size: 0.95rem; margin-bottom: 20px; }
+
+    /* ========================
+       GAME 1 – Matching Emojis (age 3)
+    ======================== */
+    .match-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+    .match-card {
+      aspect-ratio: 1;
+      background: linear-gradient(135deg, #f093fb, #f5576c);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.4rem;
+      cursor: pointer;
+      user-select: none;
+      transition: transform .2s, box-shadow .2s;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      position: relative;
+    }
+    .match-card.flipped { background: linear-gradient(135deg, #a18cd1, #fbc2eb); }
+    .match-card.matched { background: linear-gradient(135deg, #84fab0, #8fd3f4); pointer-events: none; }
+    .match-card:hover:not(.matched) { transform: scale(1.05); }
+    .match-card .cover {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, #f093fb, #f5576c);
+      border-radius: 16px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.8rem;
+      transition: opacity .3s;
+    }
+    .match-card.flipped .cover,
+    .match-card.matched .cover { opacity: 0; pointer-events: none; }
+
+    /* ========================
+       GAME 2 – Colors Quiz (age 3)
+    ======================== */
+    .color-question {
+      text-align: center;
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: #333;
+    }
+    .color-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+    }
+    .color-btn {
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      border: 4px solid transparent;
+      cursor: pointer;
+      transition: transform .2s, border-color .2s;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    .color-btn:hover { transform: scale(1.1); }
+    .color-btn.correct { border-color: #2ecc71; transform: scale(1.15); }
+    .color-btn.wrong { border-color: #e74c3c; animation: shake .4s; }
+
+    /* ========================
+       GAME 3 – Animal Sound (age 3)
+    ======================== */
+    .animal-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+    .animal-btn {
+      padding: 16px 8px;
+      border-radius: 18px;
+      border: 3px solid transparent;
+      background: #f8f9fa;
+      cursor: pointer;
+      font-family: 'Tajawal', sans-serif;
+      transition: all .25s;
+      text-align: center;
+    }
+    .animal-btn .emoji { font-size: 2.5rem; display: block; }
+    .animal-btn .name { font-size: 0.9rem; color: #555; margin-top: 4px; }
+    .animal-btn:hover { background: #e8f4fd; transform: translateY(-2px); }
+    .animal-btn.correct { background: #d4edda; border-color: #28a745; }
+    .animal-btn.wrong { background: #f8d7da; border-color: #dc3545; animation: shake .4s; }
+    .animal-question { font-size: 1.15rem; font-weight: 700; text-align: center; margin-bottom: 16px; color: #333; }
+
+    /* ========================
+       GAME 4 – Count Items (age 5)
+    ======================== */
+    .count-area {
+      text-align: center;
+    }
+    .count-emojis {
+      font-size: 2.8rem;
+      letter-spacing: 6px;
+      margin: 14px 0;
+      min-height: 60px;
+      word-break: break-all;
+    }
+    .count-question { font-size: 1.2rem; font-weight: 700; color: #333; margin-bottom: 14px; }
+    .count-choices {
+      display: flex; flex-wrap: wrap; gap: 12px; justify-content: center;
+    }
+    .count-choice {
+      width: 64px; height: 64px;
+      border-radius: 14px;
+      font-size: 1.5rem;
+      font-weight: 900;
+      border: 3px solid #ddd;
+      background: #f8f9fa;
+      cursor: pointer;
+      font-family: 'Tajawal', sans-serif;
+      transition: all .2s;
+    }
+    .count-choice:hover { background: #e8f4fd; border-color: #4ECDC4; }
+    .count-choice.correct { background: #d4edda; border-color: #28a745; }
+    .count-choice.wrong { background: #f8d7da; border-color: #dc3545; animation: shake .4s; }
+
+    /* ========================
+       GAME 5 – Missing Letter (age 5)
+    ======================== */
+    .word-display {
+      font-size: 2.5rem;
+      text-align: center;
+      letter-spacing: 16px;
+      margin: 10px 0 20px;
+      color: #333;
+    }
+    .word-display .blank {
+      display: inline-block;
+      width: 50px;
+      border-bottom: 4px solid #4ECDC4;
+      color: #4ECDC4;
+      font-weight: 900;
+    }
+    .letter-choices {
+      display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
+    }
+    .letter-btn {
+      width: 56px; height: 56px;
+      border-radius: 12px;
+      font-size: 1.4rem;
+      font-weight: 700;
+      border: 3px solid #ddd;
+      background: #f8f9fa;
+      cursor: pointer;
+      font-family: 'Tajawal', sans-serif;
+      transition: all .2s;
+    }
+    .letter-btn:hover { background: #e8f4fd; border-color: #4ECDC4; }
+    .letter-btn.correct { background: #d4edda; border-color: #28a745; }
+    .letter-btn.wrong { background: #f8d7da; border-color: #dc3545; animation: shake .4s; }
+
+    /* ========================
+       GAME 6 – Sequence (age 5)
+    ======================== */
+    .sequence-row {
+      display: flex; gap: 12px; align-items: center; flex-wrap: wrap;
+      margin-bottom: 16px; justify-content: center;
+    }
+    .seq-item {
+      width: 64px; height: 64px;
+      border-radius: 14px;
+      font-size: 2rem;
+      display: flex; align-items: center; justify-content: center;
+      background: #f0f0f0;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+    }
+    .seq-item.unknown { background: #e8e8e8; color: #aaa; font-size: 1.4rem; }
+    .seq-choices { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+    .seq-btn {
+      padding: 10px 20px;
+      border-radius: 12px;
+      font-size: 1.5rem;
+      border: 3px solid #ddd;
+      background: #f8f9fa;
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .seq-btn:hover { background: #e8f4fd; border-color: #4ECDC4; }
+    .seq-btn.correct { background: #d4edda; border-color: #28a745; }
+    .seq-btn.wrong { background: #f8d7da; border-color: #dc3545; animation: shake .4s; }
+
+    /* Feedback */
+    .feedback {
+      text-align: center;
+      padding: 10px;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-top: 14px;
+      min-height: 44px;
+      transition: all .3s;
+    }
+    .feedback.success { background: #d4edda; color: #155724; }
+    .feedback.error { background: #f8d7da; color: #721c24; }
+
+    .next-btn {
+      display: block;
+      margin: 14px auto 0;
+      padding: 12px 32px;
+      border: none;
+      border-radius: 50px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      font-size: 1rem;
+      font-family: 'Tajawal', sans-serif;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform .2s;
+    }
+    .next-btn:hover { transform: scale(1.05); }
+
+    @keyframes shake {
+      0%,100% { transform: translateX(0); }
+      25% { transform: translateX(-6px); }
+      75% { transform: translateX(6px); }
+    }
+    @keyframes bounce {
+      0%,100% { transform: scale(1); }
+      50% { transform: scale(1.15); }
+    }
+    .bounce { animation: bounce .5s; }
+
+    footer {
+      text-align: center;
+      color: rgba(255,255,255,0.7);
+      padding: 20px;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>🎮 ألعاب الألغاز للأطفال</h1>
+  <p>تحديات ذهنية ممتعة — اختر الفئة العمرية!</p>
+</header>
+
+<!-- Age Tabs -->
+<div class="tabs">
+  <button class="tab-btn age3 active" onclick="showAge(3)">🐣 عمر 3 سنوات</button>
+  <button class="tab-btn age5" onclick="showAge(5)">🦁 عمر 5 سنوات</button>
+</div>
+
+<!-- Score -->
+<div style="max-width:900px;width:100%;padding:0 16px">
+  <div class="score-bar">⭐ نقاطي: <span id="score">0</span></div>
+</div>
+
+<!-- ===================== AGE 3 ===================== -->
+<div class="section visible" id="section3">
+
+  <!-- Game 1: Memory Match -->
+  <div class="game-card card-3">
+    <div class="game-title">🃏 لعبة المطابقة</div>
+    <div class="game-desc">اضغط على البطاقات وجد المتشابهين!</div>
+    <div class="match-grid" id="matchGrid"></div>
+    <div class="feedback" id="matchFeedback"></div>
+    <button class="next-btn" onclick="initMatch()">🔄 لعبة جديدة</button>
+  </div>
+
+  <!-- Game 2: Colors -->
+  <div class="game-card card-3">
+    <div class="game-title">🎨 ألعاب الألوان</div>
+    <div class="game-desc">اضغط على اللون الصحيح!</div>
+    <div class="color-question" id="colorQ"></div>
+    <div class="color-options" id="colorOptions"></div>
+    <div class="feedback" id="colorFeedback"></div>
+  </div>
+
+  <!-- Game 3: Animal Sounds -->
+  <div class="game-card card-3">
+    <div class="game-title">🐾 أصوات الحيوانات</div>
+    <div class="game-desc">من الذي يصدر هذا الصوت؟</div>
+    <div class="animal-question" id="animalQ"></div>
+    <div class="animal-grid" id="animalGrid"></div>
+    <div class="feedback" id="animalFeedback"></div>
+  </div>
+
+</div>
+
+<!-- ===================== AGE 5 ===================== -->
+<div class="section" id="section5">
+
+  <!-- Game 4: Counting -->
+  <div class="game-card card-5">
+    <div class="game-title">🔢 تحدي العد</div>
+    <div class="game-desc">عد الرموز واختر الإجابة الصحيحة!</div>
+    <div class="count-area">
+      <div class="count-question" id="countQ"></div>
+      <div class="count-emojis" id="countEmojis"></div>
+      <div class="count-choices" id="countChoices"></div>
+    </div>
+    <div class="feedback" id="countFeedback"></div>
+  </div>
+
+  <!-- Game 5: Missing Letter (Arabic words) -->
+  <div class="game-card card-5">
+    <div class="game-title">🔤 الحرف الناقص</div>
+    <div class="game-desc">أكمل الكلمة بالحرف الصحيح!</div>
+    <div class="word-display" id="wordDisplay"></div>
+    <div class="letter-choices" id="letterChoices"></div>
+    <div class="feedback" id="letterFeedback"></div>
+  </div>
+
+  <!-- Game 6: Pattern Sequence -->
+  <div class="game-card card-5">
+    <div class="game-title">🔮 إكمال النمط</div>
+    <div class="game-desc">ما التالي في السلسلة؟</div>
+    <div class="sequence-row" id="seqRow"></div>
+    <div class="seq-choices" id="seqChoices"></div>
+    <div class="feedback" id="seqFeedback"></div>
+  </div>
+
+</div>
+
+<footer>🌟 بالتوفيق! استمر في اللعب والتعلم 🌟</footer>
+
+<script>
+  let totalScore = 0;
+  function addScore(pts) {
+    totalScore += pts;
+    document.getElementById('score').textContent = totalScore;
+    document.getElementById('score').classList.add('bounce');
+    setTimeout(() => document.getElementById('score').classList.remove('bounce'), 500);
+  }
+
+  function showAge(age) {
+    document.getElementById('section3').classList.toggle('visible', age === 3);
+    document.getElementById('section5').classList.toggle('visible', age === 5);
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelector(`.tab-btn.age${age}`).classList.add('active');
+  }
+
+  function setFeedback(id, msg, ok) {
+    const el = document.getElementById(id);
+    el.textContent = msg;
+    el.className = 'feedback ' + (ok ? 'success' : 'error');
+  }
+
+  /* ===================== GAME 1: Memory Match ===================== */
+  const matchEmojis = ['🐶','🐱','🐭','🐹','🐰','🦊','🐻','🐼'];
+  let firstCard = null, secondCard = null, lockMatch = false, matchedPairs = 0;
+
+  function initMatch() {
+    matchedPairs = 0;
+    firstCard = null; secondCard = null; lockMatch = false;
+    document.getElementById('matchFeedback').textContent = '';
+    document.getElementById('matchFeedback').className = 'feedback';
+    const arr = [...matchEmojis, ...matchEmojis].sort(() => Math.random() - .5);
+    const grid = document.getElementById('matchGrid');
+    grid.innerHTML = '';
+    arr.forEach(emoji => {
+      const card = document.createElement('div');
+      card.className = 'match-card';
+      card.dataset.emoji = emoji;
+      card.innerHTML = `<span class="cover">❓</span><span class="front">${emoji}</span>`;
+      card.addEventListener('click', flipCard);
+      grid.appendChild(card);
+    });
+  }
+
+  function flipCard() {
+    if (lockMatch || this.classList.contains('flipped') || this.classList.contains('matched')) return;
+    this.classList.add('flipped');
+    if (!firstCard) { firstCard = this; return; }
+    secondCard = this;
+    lockMatch = true;
+    if (firstCard.dataset.emoji === secondCard.dataset.emoji) {
+      firstCard.classList.add('matched');
+      secondCard.classList.add('matched');
+      firstCard = null; secondCard = null; lockMatch = false;
+      matchedPairs++;
+      if (matchedPairs === matchEmojis.length) {
+        setFeedback('matchFeedback', '🎉 أحسنت! وجدت كل الأزواج!', true);
+        addScore(20);
+      }
+    } else {
+      setTimeout(() => {
+        firstCard.classList.remove('flipped');
+        secondCard.classList.remove('flipped');
+        firstCard = null; secondCard = null; lockMatch = false;
+      }, 900);
+    }
+  }
+
+  /* ===================== GAME 2: Colors ===================== */
+  const colors3 = [
+    { name: 'الأحمر', hex: '#e74c3c' },
+    { name: 'الأزرق', hex: '#3498db' },
+    { name: 'الأصفر', hex: '#f1c40f' },
+    { name: 'الأخضر', hex: '#2ecc71' },
+    { name: 'البرتقالي', hex: '#e67e22' },
+    { name: 'الوردي', hex: '#ff6b9d' },
+  ];
+  let currentColor;
+
+  function initColor() {
+    currentColor = colors3[Math.floor(Math.random() * colors3.length)];
+    document.getElementById('colorQ').textContent = `👆 اضغط على اللون: ${currentColor.name}`;
+    document.getElementById('colorFeedback').textContent = '';
+    document.getElementById('colorFeedback').className = 'feedback';
+    const opts = [...colors3].sort(() => Math.random() - .5);
+    const div = document.getElementById('colorOptions');
+    div.innerHTML = '';
+    opts.forEach(c => {
+      const btn = document.createElement('div');
+      btn.className = 'color-btn';
+      btn.style.background = c.hex;
+      btn.addEventListener('click', () => {
+        if (c.hex === currentColor.hex) {
+          btn.classList.add('correct');
+          setFeedback('colorFeedback', '✅ ممتاز! إجابة صحيحة!', true);
+          addScore(10);
+          setTimeout(initColor, 1400);
+        } else {
+          btn.classList.add('wrong');
+          setFeedback('colorFeedback', '❌ حاول مرة ثانية!', false);
+          setTimeout(() => btn.classList.remove('wrong'), 500);
+        }
+      });
+      div.appendChild(btn);
+    });
+  }
+
+  /* ===================== GAME 3: Animals ===================== */
+  const animals = [
+    { emoji: '🐄', name: 'البقرة', sound: 'تقول: خوار 🐄' },
+    { emoji: '🐸', name: 'الضفدع', sound: 'تقول: نقيق 🐸' },
+    { emoji: '🐱', name: 'القطة', sound: 'تقول: مياو 🐱' },
+    { emoji: '🐶', name: 'الكلب', sound: 'تقول: هاو هاو 🐶' },
+    { emoji: '🐔', name: 'الدجاجة', sound: 'تقول: كو كو 🐔' },
+    { emoji: '🦁', name: 'الأسد', sound: 'يزأر 🦁' },
+    { emoji: '🐸', name: 'الضفدع', sound: 'تقول: نقيق 🐸' },
+    { emoji: '🐑', name: 'الخروف', sound: 'يقول: ماء 🐑' },
+  ];
+  let currentAnimal;
+
+  function initAnimal() {
+    const unique = [...new Map(animals.map(a => [a.emoji, a])).values()];
+    currentAnimal = unique[Math.floor(Math.random() * unique.length)];
+    document.getElementById('animalQ').textContent = `🔊 من الحيوان الذي ${currentAnimal.sound}؟`;
+    document.getElementById('animalFeedback').textContent = '';
+    document.getElementById('animalFeedback').className = 'feedback';
+    const choices = [currentAnimal, ...unique.filter(a => a.emoji !== currentAnimal.emoji)
+      .sort(() => Math.random() - .5).slice(0, 5)]
+      .sort(() => Math.random() - .5);
+    const grid = document.getElementById('animalGrid');
+    grid.innerHTML = '';
+    choices.forEach(a => {
+      const btn = document.createElement('button');
+      btn.className = 'animal-btn';
+      btn.innerHTML = `<span class="emoji">${a.emoji}</span><span class="name">${a.name}</span>`;
+      btn.addEventListener('click', () => {
+        if (a.emoji === currentAnimal.emoji) {
+          btn.classList.add('correct');
+          setFeedback('animalFeedback', '🎉 صحيح! أحسنت!', true);
+          addScore(10);
+          setTimeout(initAnimal, 1400);
+        } else {
+          btn.classList.add('wrong');
+          setFeedback('animalFeedback', '❌ حاول مرة أخرى!', false);
+          setTimeout(() => btn.classList.remove('wrong'), 500);
+        }
+      });
+      grid.appendChild(btn);
+    });
+  }
+
+  /* ===================== GAME 4: Counting ===================== */
+  const countEmojis5 = ['⭐','🍎','🌸','🎈','🐟','🍭','🌟','🦋'];
+  let correctCount;
+
+  function initCount() {
+    const emoji = countEmojis5[Math.floor(Math.random() * countEmojis5.length)];
+    correctCount = Math.floor(Math.random() * 9) + 2;
+    document.getElementById('countQ').textContent = `كم عدد ${emoji} ؟`;
+    document.getElementById('countEmojis').textContent = emoji.repeat(correctCount);
+    document.getElementById('countFeedback').textContent = '';
+    document.getElementById('countFeedback').className = 'feedback';
+    let choices = new Set([correctCount]);
+    while (choices.size < 4) choices.add(Math.floor(Math.random() * 12) + 1);
+    const div = document.getElementById('countChoices');
+    div.innerHTML = '';
+    [...choices].sort(() => Math.random() - .5).forEach(n => {
+      const btn = document.createElement('button');
+      btn.className = 'count-choice';
+      btn.textContent = n;
+      btn.addEventListener('click', () => {
+        if (+btn.textContent === correctCount) {
+          btn.classList.add('correct');
+          setFeedback('countFeedback', `✅ صحيح! العدد هو ${correctCount}`, true);
+          addScore(15);
+          setTimeout(initCount, 1400);
+        } else {
+          btn.classList.add('wrong');
+          setFeedback('countFeedback', '❌ حاول مرة أخرى!', false);
+          setTimeout(() => btn.classList.remove('wrong'), 500);
+        }
+      });
+      div.appendChild(btn);
+    });
+  }
+
+  /* ===================== GAME 5: Missing Letter ===================== */
+  const words5 = [
+    { word: 'قِطَّة', blank: 1, letters: ['ط','م','ر','س','ب'] },
+    { word: 'كِتَاب', blank: 0, letters: ['ك','م','ح','و','ن'] },
+    { word: 'شَمْس', blank: 2, letters: ['م','ن','ق','ر','ل'] },
+    { word: 'بَيْت', blank: 3, letters: ['ت','ك','م','ش','ب'] },
+    { word: 'سَمَك', blank: 2, letters: ['م','ك','ر','ع','و'] },
+    { word: 'أَسَد', blank: 1, letters: ['س','ق','م','ر','ت'] },
+    { word: 'زَهْرَة', blank: 0, letters: ['ز','ف','ع','ر','ل'] },
+    { word: 'نَمِر', blank: 3, letters: ['ر','ك','م','س','ب'] },
+  ];
+  let currentWord;
+
+  function initWord() {
+    currentWord = words5[Math.floor(Math.random() * words5.length)];
+    const chars = [...currentWord.word];
+    const displayed = chars.map((c, i) =>
+      i === currentWord.blank
+        ? `<span class="blank">_</span>`
+        : `<span>${c}</span>`
+    ).join('');
+    document.getElementById('wordDisplay').innerHTML = displayed;
+    document.getElementById('letterFeedback').textContent = '';
+    document.getElementById('letterFeedback').className = 'feedback';
+    const correct = [...currentWord.word][currentWord.blank];
+    const allLetters = [...new Set([correct, ...currentWord.letters])].sort(() => Math.random() - .5).slice(0, 5);
+    if (!allLetters.includes(correct)) allLetters[0] = correct;
+    const div = document.getElementById('letterChoices');
+    div.innerHTML = '';
+    allLetters.sort(() => Math.random() - .5).forEach(l => {
+      const btn = document.createElement('button');
+      btn.className = 'letter-btn';
+      btn.textContent = l;
+      btn.addEventListener('click', () => {
+        if (l === correct) {
+          btn.classList.add('correct');
+          setFeedback('letterFeedback', `✅ ممتاز! الحرف هو "${correct}"`, true);
+          addScore(15);
+          setTimeout(initWord, 1400);
+        } else {
+          btn.classList.add('wrong');
+          setFeedback('letterFeedback', '❌ حاول مرة أخرى!', false);
+          setTimeout(() => btn.classList.remove('wrong'), 500);
+        }
+      });
+      div.appendChild(btn);
+    });
+  }
+
+  /* ===================== GAME 6: Sequence ===================== */
+  const sequences = [
+    ['🐶','🐱','🐶','🐱','🐶','?'], // answer: 🐱
+    ['⭐','⭐','🌙','⭐','⭐','?'], // 🌙
+    ['🍎','🍌','🍎','🍌','🍎','?'], // 🍌
+    ['🔵','🔴','🔵','🔴','🔵','?'], // 🔴
+    ['1️⃣','2️⃣','3️⃣','4️⃣','5️⃣','?'], // 6️⃣
+    ['🌸','🌺','🌸','🌺','🌸','?'], // 🌺
+    ['🐠','🐟','🐠','🐟','🐠','?'], // 🐟
+  ];
+  let currentSeq, seqAnswer;
+
+  function initSeq() {
+    const seq = sequences[Math.floor(Math.random() * sequences.length)];
+    currentSeq = seq.slice(0, -1);
+    seqAnswer = seq.slice(-2, -1)[0]; // the one before ?
+    document.getElementById('seqFeedback').textContent = '';
+    document.getElementById('seqFeedback').className = 'feedback';
+    const row = document.getElementById('seqRow');
+    row.innerHTML = '';
+    currentSeq.forEach((item, i) => {
+      const div = document.createElement('div');
+      div.className = 'seq-item' + (i === currentSeq.length - 1 ? '' : '');
+      div.textContent = item;
+      row.appendChild(div);
+    });
+    const q = document.createElement('div');
+    q.className = 'seq-item unknown';
+    q.textContent = '?';
+    row.appendChild(q);
+
+    // Wrong choices
+    const wrongPool = ['🌈','🎸','🏀','🌴','🦋','🚀','🎀','🌊'];
+    const wrongs = wrongPool.filter(e => !seq.includes(e)).slice(0, 3);
+    const all = [seqAnswer, ...wrongs].sort(() => Math.random() - .5);
+    const choicesDiv = document.getElementById('seqChoices');
+    choicesDiv.innerHTML = '';
+    all.forEach(e => {
+      const btn = document.createElement('button');
+      btn.className = 'seq-btn';
+      btn.textContent = e;
+      btn.addEventListener('click', () => {
+        if (e === seqAnswer) {
+          btn.classList.add('correct');
+          setFeedback('seqFeedback', '🎉 إجابة صحيحة! عبقري!', true);
+          addScore(15);
+          setTimeout(initSeq, 1400);
+        } else {
+          btn.classList.add('wrong');
+          setFeedback('seqFeedback', '❌ حاول مرة أخرى!', false);
+          setTimeout(() => btn.classList.remove('wrong'), 500);
+        }
+      });
+      choicesDiv.appendChild(btn);
+    });
+  }
+
+  // Init all
+  initMatch();
+  initColor();
+  initAnimal();
+  initCount();
+  initWord();
+  initSeq();
+</script>
+</body>
+</html>
