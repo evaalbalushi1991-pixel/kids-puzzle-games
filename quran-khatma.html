@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>جدول ختمة القرآن – رمضان</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap');
+
+:root{
+  --gold:#c9a84c;
+  --gold2:#f0d080;
+  --dark:#0d1b2a;
+  --dark2:#1b2e45;
+  --dark3:#243b55;
+  --green:#2d6a4f;
+  --green2:#52b788;
+  --red:#c0392b;
+  --card:#1e3250;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+  font-family:'Tajawal',sans-serif;
+  background:var(--dark);
+  color:#f0ead6;
+  min-height:100vh;
+  background-image:
+    radial-gradient(ellipse at top, #1b3a5c 0%, #0d1b2a 60%);
+}
+
+/* ── Stars bg ── */
+body::before{
+  content:'';
+  position:fixed;
+  inset:0;
+  background-image:
+    radial-gradient(1px 1px at 10% 15%, rgba(255,255,255,.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 25% 40%, rgba(255,255,255,.3) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 45% 10%, rgba(255,255,255,.6) 0%, transparent 100%),
+    radial-gradient(1px 1px at 65% 30%, rgba(255,255,255,.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 80% 60%, rgba(255,255,255,.3) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 90% 20%, rgba(255,255,255,.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 35% 70%, rgba(255,255,255,.2) 0%, transparent 100%),
+    radial-gradient(1px 1px at 55% 85%, rgba(255,255,255,.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 70% 75%, rgba(255,255,255,.4) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 15% 90%, rgba(255,255,255,.5) 0%, transparent 100%);
+  pointer-events:none;
+  z-index:0;
+}
+
+/* ── Header ── */
+header{
+  position:relative;
+  z-index:1;
+  text-align:center;
+  padding:40px 20px 30px;
+}
+.moon-icon{font-size:60px;display:block;margin-bottom:10px;animation:float 3s ease-in-out infinite;}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+
+header h1{
+  font-size:2.4rem;
+  font-weight:900;
+  background:linear-gradient(135deg,var(--gold2),var(--gold));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+  margin-bottom:6px;
+}
+header p{color:rgba(240,234,214,.7);font-size:1.05rem;}
+
+.bismillah{
+  font-size:1.5rem;
+  color:var(--gold);
+  letter-spacing:2px;
+  margin:10px 0 6px;
+}
+
+/* ── Progress Section ── */
+.progress-section{
+  position:relative;z-index:1;
+  max-width:700px;
+  margin:0 auto 30px;
+  padding:0 16px;
+}
+.progress-card{
+  background:var(--card);
+  border:1px solid rgba(201,168,76,.3);
+  border-radius:20px;
+  padding:20px 24px;
+  box-shadow:0 8px 32px rgba(0,0,0,.4);
+}
+.progress-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:14px;
+}
+.progress-title{font-size:1.1rem;font-weight:700;color:var(--gold);}
+.progress-count{
+  font-size:1.8rem;
+  font-weight:900;
+  color:var(--gold2);
+}
+.progress-bar-bg{
+  background:rgba(255,255,255,.1);
+  border-radius:50px;
+  height:14px;
+  overflow:hidden;
+}
+.progress-bar-fill{
+  height:100%;
+  border-radius:50px;
+  background:linear-gradient(90deg,var(--green2),var(--gold));
+  transition:width .6s ease;
+  width:0%;
+}
+.progress-labels{
+  display:flex;
+  justify-content:space-between;
+  margin-top:8px;
+  font-size:.85rem;
+  color:rgba(240,234,214,.5);
+}
+.juz-summary{
+  display:flex;
+  justify-content:center;
+  gap:20px;
+  margin-top:14px;
+  flex-wrap:wrap;
+}
+.juz-stat{
+  text-align:center;
+  background:rgba(255,255,255,.06);
+  border-radius:12px;
+  padding:8px 18px;
+}
+.juz-stat .num{font-size:1.6rem;font-weight:900;color:var(--gold2);}
+.juz-stat .lbl{font-size:.8rem;color:rgba(240,234,214,.6);}
+
+/* ── Days Grid ── */
+.days-grid{
+  position:relative;z-index:1;
+  max-width:700px;
+  margin:0 auto;
+  padding:0 16px 60px;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+
+/* ── Day Card ── */
+.day-card{
+  background:var(--card);
+  border:1px solid rgba(201,168,76,.15);
+  border-radius:18px;
+  padding:18px 20px;
+  box-shadow:0 4px 20px rgba(0,0,0,.3);
+  transition:transform .2s, box-shadow .2s, border-color .3s;
+  cursor:default;
+}
+.day-card:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 28px rgba(0,0,0,.4);
+  border-color:rgba(201,168,76,.35);
+}
+.day-card.done{
+  border-color:rgba(82,183,136,.5);
+  background:linear-gradient(135deg,#1a2e40,#1e3a2f);
+}
+.day-card.done .day-juz{color:var(--green2);}
+
+/* Card top row */
+.card-top{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  margin-bottom:14px;
+}
+
+.day-badge{
+  min-width:52px;
+  height:52px;
+  border-radius:14px;
+  background:linear-gradient(135deg,var(--dark3),var(--dark2));
+  border:1px solid rgba(201,168,76,.3);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  flex-shrink:0;
+}
+.day-badge .day-num{font-size:.75rem;color:var(--gold);font-weight:700;}
+.day-badge .day-icon{font-size:1.3rem;line-height:1;}
+
+.card-info{flex:1;}
+.day-juz{
+  font-size:1.05rem;
+  font-weight:900;
+  color:var(--gold2);
+  margin-bottom:3px;
+}
+.day-pages{font-size:.82rem;color:rgba(240,234,214,.5);}
+
+/* Checkbox */
+.check-area{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  align-items:flex-start;
+  flex-shrink:0;
+}
+.check-btn{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  padding:7px 14px;
+  border-radius:50px;
+  border:2px solid;
+  cursor:pointer;
+  font-family:'Tajawal',sans-serif;
+  font-size:.9rem;
+  font-weight:700;
+  transition:all .25s;
+  background:transparent;
+  white-space:nowrap;
+}
+.check-btn.done-btn{
+  border-color:var(--green2);
+  color:var(--green2);
+}
+.check-btn.done-btn:hover,.check-btn.done-btn.active{
+  background:var(--green2);
+  color:#fff;
+}
+.check-btn.notdone-btn{
+  border-color:rgba(192,57,43,.6);
+  color:rgba(192,57,43,.8);
+}
+.check-btn.notdone-btn:hover,.check-btn.notdone-btn.active{
+  background:var(--red);
+  color:#fff;
+}
+
+/* Verse box */
+.verse-box{
+  background:rgba(255,255,255,.04);
+  border-right:3px solid var(--gold);
+  border-radius:0 10px 10px 0;
+  padding:10px 14px;
+  margin-bottom:10px;
+  font-size:.9rem;
+  color:var(--gold2);
+  line-height:1.8;
+  font-weight:500;
+}
+.verse-ref{
+  font-size:.78rem;
+  color:rgba(201,168,76,.6);
+  margin-top:4px;
+}
+
+/* Motivation */
+.motivation{
+  background:rgba(255,255,255,.04);
+  border-radius:10px;
+  padding:9px 14px;
+  font-size:.88rem;
+  color:rgba(240,234,214,.75);
+  line-height:1.7;
+  border-right:3px solid var(--green2);
+}
+.motivation::before{content:'💡 ';}
+
+/* ── Completion Banner ── */
+#completionBanner{
+  display:none;
+  position:fixed;
+  inset:0;z-index:999;
+  background:rgba(0,0,0,.85);
+  align-items:center;
+  justify-content:center;
+}
+#completionBanner.show{display:flex;}
+.banner-box{
+  background:linear-gradient(135deg,var(--dark2),var(--dark3));
+  border:2px solid var(--gold);
+  border-radius:24px;
+  padding:40px;
+  text-align:center;
+  max-width:360px;
+  animation:popIn .5s ease;
+}
+@keyframes popIn{0%{transform:scale(.5);opacity:0}100%{transform:scale(1);opacity:1}}
+.banner-box .big-icon{font-size:64px;display:block;margin-bottom:14px;}
+.banner-box h2{font-size:1.8rem;color:var(--gold);font-weight:900;margin-bottom:8px;}
+.banner-box p{color:rgba(240,234,214,.8);font-size:1rem;line-height:1.7;}
+.banner-close{
+  margin-top:20px;
+  padding:10px 30px;
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  border:none;
+  border-radius:50px;
+  font-family:'Tajawal',sans-serif;
+  font-size:1rem;
+  font-weight:700;
+  color:var(--dark);
+  cursor:pointer;
+}
+
+/* Footer */
+footer{
+  position:relative;z-index:1;
+  text-align:center;
+  padding:20px;
+  color:rgba(240,234,214,.35);
+  font-size:.85rem;
+}
+</style>
+</head>
+<body>
+
+<!-- ── Header ── -->
+<header>
+  <span class="moon-icon">🌙</span>
+  <div class="bismillah">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>
+  <h1>جدول ختمة القرآن الكريم</h1>
+  <p>رمضان المبارك • ٣٠ جزءاً في ٢٠ يوماً</p>
+</header>
+
+<!-- ── Progress ── -->
+<div class="progress-section">
+  <div class="progress-card">
+    <div class="progress-header">
+      <span class="progress-title">📊 تقدّمك في الختمة</span>
+      <span class="progress-count"><span id="doneCount">٠</span> / ٢٠</span>
+    </div>
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill" id="progressBar"></div>
+    </div>
+    <div class="progress-labels">
+      <span>البداية</span>
+      <span id="progressPct">٠٪</span>
+      <span>الختمة ✓</span>
+    </div>
+    <div class="juz-summary">
+      <div class="juz-stat">
+        <div class="num" id="juzDone">٠</div>
+        <div class="lbl">جزء مكتمل</div>
+      </div>
+      <div class="juz-stat">
+        <div class="num" id="juzLeft">٣٠</div>
+        <div class="lbl">جزء متبقي</div>
+      </div>
+      <div class="juz-stat">
+        <div class="num" id="daysLeft">٢٠</div>
+        <div class="lbl">يوم متبقي</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Days ── -->
+<div class="days-grid" id="daysGrid"></div>
+
+<!-- ── Completion Banner ── -->
+<div id="completionBanner">
+  <div class="banner-box">
+    <span class="big-icon">🎉</span>
+    <h2>ختمت القرآن الكريم!</h2>
+    <p>بارك الله فيكِ وتقبّل منكِ<br/>اللهم اجعله شفيعاً لنا يوم القيامة</p>
+    <button class="banner-close" onclick="closeBanner()">آمين 🤲</button>
+  </div>
+</div>
+
+<footer>🌙 رمضان كريم – تقبّل الله منّا ومنكم صالح الأعمال</footer>
+
+<script>
+/* ══════════════════════════════════════
+   DATA
+══════════════════════════════════════ */
+const days = [
+  {
+    juz:'الجزء الأول والثاني', pages:'ص ١ – ٤٢', icon:'🌅',
+    verse:'﴿ شَهْرُ رَمَضَانَ الَّذِي أُنزِلَ فِيهِ الْقُرْآنُ ﴾',
+    ref:'البقرة: ١٨٥',
+    motivation:'ابدئي رمضان بنيّة صادقة، فكلّ خطوة بنيّة ختم القرآن محسوبة لكِ!'
+  },
+  {
+    juz:'الجزء الثالث والرابع', pages:'ص ٤٣ – ٨٤', icon:'🌤',
+    verse:'﴿ وَإِذَا سَأَلَكَ عِبَادِي عَنِّي فَإِنِّي قَرِيبٌ ﴾',
+    ref:'البقرة: ١٨٦',
+    motivation:'الله قريب منكِ جداً. تلاوتكِ دعاء وقرب، فلا تتوقفي!'
+  },
+  {
+    juz:'الجزء الخامس والسادس', pages:'ص ٨٥ – ١٢٦', icon:'☀️',
+    verse:'﴿ وَاسْتَعِينُوا بِالصَّبْرِ وَالصَّلَاةِ ﴾',
+    ref:'البقرة: ٤٥',
+    motivation:'الاستمرار هو السرّ! ولو صفحات قليلة، المهم لا تنقطعي.'
+  },
+  {
+    juz:'الجزء السابع والثامن', pages:'ص ١٢٧ – ١٦٨', icon:'🌿',
+    verse:'﴿ إِنَّ اللَّهَ مَعَ الصَّابِرِينَ ﴾',
+    ref:'البقرة: ١٥٣',
+    motivation:'أنتِ في الربع الأول! الصبر مفتاح كل خير، والله معكِ.'
+  },
+  {
+    juz:'الجزء التاسع والعاشر', pages:'ص ١٦٩ – ٢١٠', icon:'🌺',
+    verse:'﴿ وَمَن يَتَّقِ اللَّهَ يَجْعَل لَّهُ مَخْرَجًا ﴾',
+    ref:'الطلاق: ٢',
+    motivation:'ربع المسير قطعتيه! كلّ آية تلوتيها نور في قلبكِ وحياتكِ.'
+  },
+  {
+    juz:'الجزء الحادي عشر والثاني عشر', pages:'ص ٢١١ – ٢٥٢', icon:'🕌',
+    verse:'﴿ يَا أَيُّهَا الَّذِينَ آمَنُوا اذْكُرُوا اللَّهَ ذِكْرًا كَثِيرًا ﴾',
+    ref:'الأحزاب: ٤١',
+    motivation:'القرآن أفضل الذكر. كلّ حرف بعشر حسنات، فأنتِ تكنزين الأجر!'
+  },
+  {
+    juz:'الجزء الثالث عشر والرابع عشر', pages:'ص ٢٥٣ – ٢٩٤', icon:'🌙',
+    verse:'﴿ وَنُنَزِّلُ مِنَ الْقُرْآنِ مَا هُوَ شِفَاءٌ وَرَحْمَةٌ ﴾',
+    ref:'الإسراء: ٨٢',
+    motivation:'القرآن شفاء للقلوب. كلّما قرأتِ أكثر، كلّما ازداد قلبكِ طمأنينة.'
+  },
+  {
+    juz:'الجزء الخامس عشر والسادس عشر', pages:'ص ٢٩٥ – ٣٣٦', icon:'⭐',
+    verse:'﴿ أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ ﴾',
+    ref:'الرعد: ٢٨',
+    motivation:'وصلتِ للنصف! هذا إنجاز رائع. خذي نفساً عميقاً وواصلي بنفس الهمّة!'
+  },
+  {
+    juz:'الجزء السابع عشر والثامن عشر', pages:'ص ٣٣٧ – ٣٧٨', icon:'🌟',
+    verse:'﴿ فَاذْكُرُونِي أَذْكُرْكُمْ ﴾',
+    ref:'البقرة: ١٥٢',
+    motivation:'بعد كل آية تقرئينها، الله يذكركِ. هل هناك شرف أعظم من هذا؟'
+  },
+  {
+    juz:'الجزء التاسع عشر والعشرون', pages:'ص ٣٧٩ – ٤٢٠', icon:'🏆',
+    verse:'﴿ وَالَّذِينَ جَاهَدُوا فِينَا لَنَهْدِيَنَّهُمْ سُبُلَنَا ﴾',
+    ref:'العنكبوت: ٦٩',
+    motivation:'عشرون جزءاً! ثلثا الطريق قطعتِه. أنتِ أقوى مما تتصورين!'
+  },
+  {
+    juz:'الجزء الحادي والعشرون', pages:'ص ٤٢١ – ٤٤١', icon:'💎',
+    verse:'﴿ وَلَقَدْ يَسَّرْنَا الْقُرْآنَ لِلذِّكْرِ فَهَلْ مِن مُّدَّكِرٍ ﴾',
+    ref:'القمر: ١٧',
+    motivation:'الله يسّر لكِ هذا القرآن. تلاوته ميسّرة إذا صدقتِ النيّة!'
+  },
+  {
+    juz:'الجزء الثاني والعشرون', pages:'ص ٤٤٢ – ٤٦١', icon:'🌹',
+    verse:'﴿ وَإِذَا قُرِئَ الْقُرْآنُ فَاسْتَمِعُوا لَهُ وَأَنصِتُوا ﴾',
+    ref:'الأعراف: ٢٠٤',
+    motivation:'استمتعي بكل آية كأنها نزلت لكِ أنتِ. هذا سرّ الخشوع في التلاوة.'
+  },
+  {
+    juz:'الجزء الثالث والعشرون', pages:'ص ٤٦٢ – ٤٨١', icon:'✨',
+    verse:'﴿ إِنَّ هَذَا الْقُرْآنَ يَهْدِي لِلَّتِي هِيَ أَقْوَمُ ﴾',
+    ref:'الإسراء: ٩',
+    motivation:'القرآن دليلكِ في الحياة. كل ما تقرئينه يزيدكِ نوراً وبصيرة!'
+  },
+  {
+    juz:'الجزء الرابع والعشرون', pages:'ص ٤٨٢ – ٥٠١', icon:'🕊',
+    verse:'﴿ وَاللَّهُ يُحِبُّ الْمُحْسِنِينَ ﴾',
+    ref:'آل عمران: ١٣٤',
+    motivation:'إحسانكِ في التلاوة ولو بالترتيل والتدبّر يجعل الله يحبّكِ أكثر!'
+  },
+  {
+    juz:'الجزء الخامس والعشرون', pages:'ص ٥٠٢ – ٥٢١', icon:'🌙',
+    verse:'﴿ تَنزِيلٌ مِّنَ الرَّحْمَنِ الرَّحِيمِ ﴾',
+    ref:'فصلت: ٢',
+    motivation:'هذا الكتاب العظيم من الرحمن. فكيف لا نملأ أوقاتنا بقراءته؟!'
+  },
+  {
+    juz:'الجزء السادس والعشرون', pages:'ص ٥٢٢ – ٥٤١', icon:'🌠',
+    verse:'﴿ وَمَن يَتَوَكَّلْ عَلَى اللَّهِ فَهُوَ حَسْبُهُ ﴾',
+    ref:'الطلاق: ٣',
+    motivation:'توكّلي على الله واستمرّي. أنتِ على بُعد خطوات من الختمة الكاملة!'
+  },
+  {
+    juz:'الجزء السابع والعشرون', pages:'ص ٥٤٢ – ٥٦١', icon:'💫',
+    verse:'﴿ سَنَشُدُّ عَضُدَكَ بِأَخِيكَ ﴾',
+    ref:'القصص: ٣٥',
+    motivation:'ثلاثة أيام فقط تبقّت! الله يشدّ من عزمكِ. لا تتوقفي الآن!'
+  },
+  {
+    juz:'الجزء الثامن والعشرون', pages:'ص ٥٦٢ – ٥٨١', icon:'🔥',
+    verse:'﴿ وَبَشِّرِ الصَّابِرِينَ ﴾',
+    ref:'البقرة: ١٥٥',
+    motivation:'يومان فقط! الصبر تاجكِ وهذا هو وقت الإنجاز. أنتِ رائعة!'
+  },
+  {
+    juz:'الجزء التاسع والعشرون', pages:'ص ٥٨٢ – ٦٠١', icon:'🌅',
+    verse:'﴿ وَإِن تَعُدُّوا نِعْمَةَ اللَّهِ لَا تُحْصُوهَا ﴾',
+    ref:'إبراهيم: ٣٤',
+    motivation:'يوم واحد وتختمين! من أعظم النعم أن يوفّقكِ الله لختم كتابه العزيز.'
+  },
+  {
+    juz:'الجزء الثلاثون – جزء عمّ', pages:'ص ٦٠٢ – ٦٠٤', icon:'🏅',
+    verse:'﴿ الْيَوْمَ أَكْمَلْتُ لَكُمْ دِينَكُمْ ﴾',
+    ref:'المائدة: ٣',
+    motivation:'اليوم هو يوم الختمة! قرئتِ كلام الله كاملاً. هنيئاً لكِ هذا الشرف العظيم!'
+  },
+];
+
+/* ══════════════════════════════════════
+   RENDER & LOGIC
+══════════════════════════════════════ */
+const STATE_KEY = 'quran_khatma_state';
+let state = JSON.parse(localStorage.getItem(STATE_KEY) || '{}');
+
+function toArabicNum(n){
+  return n.toString().replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);
+}
+
+function saveState(){ localStorage.setItem(STATE_KEY, JSON.stringify(state)); }
+
+function updateProgress(){
+  const done = Object.values(state).filter(v=>v==='done').length;
+  const pct  = Math.round((done/20)*100);
+  const juzDone = days.slice(0,done).reduce((a,_,i)=>a+(i<10?2:1),0);
+  document.getElementById('doneCount').textContent   = toArabicNum(done);
+  document.getElementById('progressPct').textContent = toArabicNum(pct)+'٪';
+  document.getElementById('progressBar').style.width = pct+'%';
+  document.getElementById('juzDone').textContent  = toArabicNum(juzDone);
+  document.getElementById('juzLeft').textContent  = toArabicNum(30-juzDone);
+  document.getElementById('daysLeft').textContent = toArabicNum(Math.max(0,20-done));
+  if(done===20) setTimeout(()=>document.getElementById('completionBanner').classList.add('show'),600);
+}
+
+function setStatus(idx, status){
+  if(state[idx]===status){ state[idx]=''; }
+  else { state[idx]=status; }
+  saveState();
+  renderCard(idx);
+  updateProgress();
+}
+
+function renderCard(idx){
+  const d   = days[idx];
+  const s   = state[idx]||'';
+  const card= document.getElementById('card-'+idx);
+  card.className='day-card'+(s==='done'?' done':'');
+
+  const doneBtnClass   ='check-btn done-btn'  +(s==='done'  ?' active':'');
+  const notdoneBtnClass='check-btn notdone-btn'+(s==='notdone'?' active':'');
+
+  card.innerHTML=`
+    <div class="card-top">
+      <div class="day-badge">
+        <span class="day-num">اليوم</span>
+        <span style="font-size:1.1rem;font-weight:900;color:var(--gold2);">${toArabicNum(idx+1)}</span>
+        <span class="day-icon">${d.icon}</span>
+      </div>
+      <div class="card-info">
+        <div class="day-juz">${d.juz}</div>
+        <div class="day-pages">📖 ${d.pages}</div>
+      </div>
+      <div class="check-area">
+        <button class="${doneBtnClass}" onclick="setStatus(${idx},'done')">
+          ✅ تمّ
+        </button>
+        <button class="${notdoneBtnClass}" onclick="setStatus(${idx},'notdone')">
+          ❌ لم يتم
+        </button>
+      </div>
+    </div>
+    <div class="verse-box">
+      ${d.verse}
+      <div class="verse-ref">— ${d.ref}</div>
+    </div>
+    <div class="motivation">${d.motivation}</div>
+  `;
+}
+
+function buildGrid(){
+  const grid=document.getElementById('daysGrid');
+  grid.innerHTML='';
+  days.forEach((_,i)=>{
+    const div=document.createElement('div');
+    div.id='card-'+i;
+    div.className='day-card';
+    grid.appendChild(div);
+    renderCard(i);
+  });
+  updateProgress();
+}
+
+function closeBanner(){
+  document.getElementById('completionBanner').classList.remove('show');
+}
+
+buildGrid();
+</script>
+</body>
+</html>
